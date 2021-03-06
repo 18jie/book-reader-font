@@ -57,7 +57,7 @@ export default {
       return url;
     },
     getTOC() {
-      let summaryUrl = `/api/btoc/?view=summary&book=${this.bid}`;
+      let summaryUrl = `/chapter/chaptersByBookId?bookId=${this.bid}`;
       let self = this;
       this.$axios.get(summaryUrl).then(res => {
         let url = `/api/btoc/${res.data[0]._id}?view=chapters&channel=mweb`;

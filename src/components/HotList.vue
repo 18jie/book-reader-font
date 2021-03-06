@@ -39,7 +39,7 @@ function makePair(list) {
     return res
 }
 
-import BookInfo from "./BookInfo"
+import BookInfo from "./BookInfo.vue"
 
 export default {
     components: {

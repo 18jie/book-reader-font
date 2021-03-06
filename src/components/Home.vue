@@ -24,11 +24,14 @@ export default {
   data() {
     return {
       recommends: {},
-      hotlists: {}
+      hotlists: {},
+      type:null
     };
   },
   created() {
+    this.type = this.$route.params.type;
     this.getbook();
+    console.log("type",type);
   },
   methods: {
     getbook() {

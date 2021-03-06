@@ -129,6 +129,7 @@ export default {
     },
     getContent() {
       let lnk = this.link;
+      // TODO 不需要使用escape方法
       let url = "/content/chapter/" + escape(lnk);
       let self = this;
       this.$axios.get(url).then(res => {

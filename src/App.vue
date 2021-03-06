@@ -31,7 +31,9 @@
                 </el-menu-item>
                 <el-menu-item index="/categories">
                   <faicon icon="th-large" size="lg"/>
+                  <!-- <router-link :to="'/home/1'"> -->
                   <span>分类</span>
+                  <!-- </router-link> -->
                 </el-menu-item>
                 <el-menu-item index="/rankings">
                   <faicon icon="sort-amount-down" size="lg"/>
