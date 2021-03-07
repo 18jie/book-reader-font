@@ -109,7 +109,7 @@ export default {
   mounted() {
     let id = this.$route.params.id;
     let self = this;
-    this.$axios.get(`/book-reader/book/bookVo/${id}`).then(res => {
+    this.$axios.get(`/book/bookDetailVo/${id}`).then(res => {
       if (res.data.code == 0) {
         self.book = res.data.data;
         // fix book info

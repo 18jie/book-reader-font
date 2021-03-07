@@ -46,15 +46,17 @@ export default {
 
       // 首页分类数据
       this.$axios
-        .get("/api/recommendPage/nodes/5910018c8094b1e228e5868f")
+        .get("/book/hostTypes")
         .then(res => {
           var arr = res.data.data;
-          if (res.data.ok) {
+          if (res.data.code == 0) {
+            console.log(res.data);
+            this.hotlists = res.data.data;
             //  this.booklist=this.imgurl(res.data.data.book)
-            this.hotlists = arr.filter(item => {
-              //  return arrs.includes(item.order!=2);
-              return item.title != "m站顶部banner";
-            });
+            // this.hotlists = arr.filter(item => {
+            //    return arrs.includes(item.order!=2);
+            //   return item.title != "m站顶部banner";
+            // });
           }
         });
     },

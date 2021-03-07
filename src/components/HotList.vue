@@ -60,12 +60,13 @@ export default {
 
   methods: {
     getHotList() {
-      this.$axios.get(`/api/recommendPage/books/${this.id}`).then(res => {
+      this.$axios.get(`/book/hotBooks/${this.id}`).then(res => {
         var data = res.data.data;
-        if (res.data.ok) {
-          this.booklist = data.map(item => {
-            return item.book;
-          });
+        if (res.data.code == 0) {
+          this.booklist = res.data.data;
+          // this.booklist = data.map(item => {
+          //   return item.book;
+          // });
           this.booklist = makePair(this.booklist)
         }
       });
@@ -79,7 +80,7 @@ export default {
 .el-header
     border-bottom 1px solid #eeeeee
 .hotlist-container
-  height: 400px
+  // height: 400px
   margin-top 10px
   border 1px solid #cab389
   border-radius 10px

@@ -103,13 +103,14 @@ export default {
   },
   methods: {
     getTOC() {
-      let summaryUrl = `/api/btoc/?view=summary&book=${this.bid}`;
+      let summaryUrl = `/chapter/chaptersByBookId?bookId=${this.bid}`;
       let self = this;
       this.$axios.get(summaryUrl).then(res => {
-        let url = `/api/btoc/${res.data[0]._id}?view=chapters&channel=mweb`;
-        self.$axios.get(url).then(r => {
-          self.bookTitle = r.data.bookName;
-          for (let item of r.data.chapters) {
+        // let url = `/api/btoc/${res.data[0]._id}?view=chapters&channel=mweb`;
+        // self.$axios.get(url).then(r => {
+          self.bookTitle = res.data.data[0].bookName;
+          console.log(self.bookTitle)
+          for (let item of res.data.data) {
             if (self.cid == item.id && self.order == item.order) {
               self.link = item.link;
               self.getContent();
@@ -124,22 +125,22 @@ export default {
             self.chapter = item;
           }
           self.$emit("first-chapter", self.chapters[0]);
-        });
+        // });
       });
     },
     getContent() {
       let lnk = this.link;
       // TODO 不需要使用escape方法
-      let url = "/content/chapter/" + escape(lnk);
+      let url = "/chapter/chapterContent/" + lnk;
       let self = this;
       this.$axios.get(url).then(res => {
-        let ch = res.data.chapter;
+        let ch = res.data.data;
         if (!ch.isVip) {
-          self.content = ch.cpContent.split("\n");
+          self.content = ch.content.split(" ");
           self.chapterTitle = ch.title;
           self.order = ch.order;
         } else {
-          self.content = ch.body.split("\n");
+          self.content = ch.content.split(" ");
           self.chapterTitle = ch.title;
           self.order = ch.order;
         }

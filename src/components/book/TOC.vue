@@ -53,16 +53,16 @@ export default {
       return r;
     },
     getLink(lnk) {
-      let url = "/content/chapter/" + escape(lnk);
+      let url = "/content/chapter/" + lnk;
       return url;
     },
     getTOC() {
       let summaryUrl = `/chapter/chaptersByBookId?bookId=${this.bid}`;
       let self = this;
       this.$axios.get(summaryUrl).then(res => {
-        let url = `/api/btoc/${res.data[0]._id}?view=chapters&channel=mweb`;
-        self.$axios.get(url).then(r => {
-          for (let item of r.data.chapters) {
+        // let url = `/api/btoc/${res.data[0]._id}?view=chapters&channel=mweb`;
+        // self.$axios.get(url).then(r => {
+          for (let item of res.data.data) {
             var ch = {};
             ch.order = item.order;
             ch.title = item.title;
@@ -73,7 +73,7 @@ export default {
           }
           self.$emit('first-chapter', self.chapters[0])
           self.chapters = doCompact(self.chapters, 3);
-        });
+        // });
       });
     }
   },
