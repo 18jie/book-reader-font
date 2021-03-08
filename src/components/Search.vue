@@ -1,23 +1,28 @@
 <template>
   <div class="search">
     <!-- <input id="search-input" class="search-input" type="search" placeholder="搜索书名或作者"> -->
-    <el-select v-model="value"
-               multiple
-               filterable
-               remote
-               reserve-keyword
-               placeholder="请输入关键词"
-               :remote-method="remoteMethod"
-               :loading="loading">
-      <el-option v-for="item in options"
-                 :key="item.id"
-                 :label="item.lable"
-                 :value="item.id">
+    <!-- <div class="user-img">
+      <img :src="avatar ? avatar : require('./comment/img/icon/avatar.jpg')" />
+    </div> -->
+    <el-select
+      v-model="value"
+      multiple
+      filterable
+      remote
+      reserve-keyword
+      placeholder="请输入关键词"
+      :remote-method="remoteMethod"
+      :loading="loading"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.id"
+        :label="item.lable"
+        :value="item.id"
+      >
       </el-option>
     </el-select>
-    <a id="search-btn"
-       class="search-btn"
-       @click="toSearch">
+    <a id="search-btn" class="search-btn" @click="toSearch">
       <faicon icon="search"></faicon>
     </a>
   </div>
@@ -26,13 +31,18 @@
 
 
 <script>
+import avatar from "./comment/Avatar.vue";
 export default {
+  components: {
+    avatar,
+  },
   data() {
     return {
       options: [],
       selectOne: {},
       loading: false,
       value: [],
+      avatar: "",
     };
   },
   methods: {
@@ -76,6 +86,12 @@ export default {
 
 
 <style lang="stylus">
+.user-img img {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+}
+
 .search {
   position: absolute;
   right: 10px;

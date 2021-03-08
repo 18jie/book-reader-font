@@ -46,6 +46,7 @@
         </el-main>
       </el-container>
     </el-main>
+    <comment style="width:400px" :commentList="comments"></comment>
     <el-dialog title="章节目录" :visible.sync="tocDialogVisible" width="50%" center>
       <dl class="toc-list">
         <dd
@@ -66,10 +67,12 @@
 <script>
 import { doCompact } from "../../util/array";
 import Config from "./Config";
+import comment from "../comment/Comment.vue";
 
 export default {
   components: {
-    Config
+    Config,
+    comment
   },
   data() {
     return {
@@ -84,7 +87,8 @@ export default {
       chapter: {},
       tocDialogVisible: false,
       configDialogVisible: false,
-      theme: 'theme-0'
+      theme: 'theme-0',
+      // comments:[],
     };
   },
   created() {

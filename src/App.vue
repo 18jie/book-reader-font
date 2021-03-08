@@ -61,7 +61,7 @@ import Search from "./components/Search.vue";
 export default {
   name: "app",
   components: {
-    Search
+    Search,
   },
   data() {
     return {
