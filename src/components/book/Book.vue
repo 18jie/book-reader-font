@@ -94,6 +94,7 @@ export default {
       chapter: {},
       star: "el-icon-star-off",
       starName: "加入书架",
+      flag: false,
     };
   },
   methods: {
@@ -117,6 +118,17 @@ export default {
         });
     },
     addToFavorite() {
+      this.$axios.get("/login/isLogin").then((res) => {
+        let tmp = res.data.data;
+        if (tmp == null) {
+          this.$message.error("请登录之后再操作!");
+        } else {
+          this.flag = true;
+        }
+      });
+      if (!this.flag) {
+        return;
+      }
       this.$axios
         .get("/favorite/addOrRemoveFavorite", {
           params: { bookId: this.book._id },

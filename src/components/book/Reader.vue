@@ -1,32 +1,46 @@
 <template>
   <el-container>
     <el-aside width="62px">
-      <div id="side-bar" class="side-bar">
+      <div id="side-bar"
+           class="side-bar">
         <dl>
-          <dd class="theme-0" @click="goToBook" title="书页">
-            <faicon icon="book" size="lg"></faicon>
+          <dd class="theme-0"
+              @click="goToBook"
+              title="书页">
+            <faicon icon="book"
+                    size="lg"></faicon>
           </dd>
-          <dd class="theme-0" @click="openTOC" title="目录">
-            <faicon icon="list" size="lg"></faicon>
+          <dd class="theme-0"
+              @click="openTOC"
+              title="目录">
+            <faicon icon="list"
+                    size="lg"></faicon>
           </dd>
-          <dd class="theme-0" @click="openConfig" title="设置">
-            <faicon icon="cog" size="lg"></faicon>
+          <dd class="theme-0"
+              @click="openConfig"
+              title="设置">
+            <faicon icon="cog"
+                    size="lg"></faicon>
           </dd>
         </dl>
       </div>
     </el-aside>
     <el-main id="reader-main">
       <el-container>
-        <el-header height="50px" class="reader-header theme-0">
+        <el-header height="50px"
+                   class="reader-header theme-0">
           <el-row class>
-            <el-col :span="4" class="reader-prev">
+            <el-col :span="4"
+                    class="reader-prev">
               <a @click="readPrev">
                 <faicon icon="arrow-left"></faicon>
                 <span>上一章</span>
               </a>
             </el-col>
-            <el-col :span="16" class="reader-book-title">{{bookTitle}}</el-col>
-            <el-col :span="4" class="reader-next">
+            <el-col :span="16"
+                    class="reader-book-title">{{bookTitle}}</el-col>
+            <el-col :span="4"
+                    class="reader-next">
               <a @click="readNext">
                 <span>下一章</span>
                 <faicon icon="arrow-right"></faicon>
@@ -36,29 +50,47 @@
         </el-header>
         <el-main class="reader-main content-box theme-0">
           <el-row>
-            <el-col :span="24" class="reader-chapter-title">{{chapterTitle}}</el-col>
+            <el-col :span="24"
+                    class="reader-chapter-title">{{chapterTitle}}</el-col>
           </el-row>
           <el-row class>
-            <el-col :span="24" class="reader-content-pane">
-              <p class="reader-content-line" v-for="(ln,i) in content" :key="i">{{ln}}</p>
+            <el-col :span="24"
+                    class="reader-content-pane">
+              <p @click="showComment(ln.line)"
+                 class="reader-content-line"
+                 v-for="(ln,i) in content"
+                 :key="i">{{ln.line}}
+                <el-badge :value="ln.commitNum"
+                          type="primary"
+                          :max="99">
+                </el-badge>
+              </p>
+
             </el-col>
           </el-row>
         </el-main>
       </el-container>
     </el-main>
-    <comment style="width:400px" :commentList="comments"></comment>
-    <el-dialog title="章节目录" :visible.sync="tocDialogVisible" width="50%" center>
+    <comment style="width:400px"
+             :cid="cid"
+             :line="line"
+             :bid="bid"></comment>
+    <el-dialog title="章节目录"
+               :visible.sync="tocDialogVisible"
+               width="50%"
+               center>
       <dl class="toc-list">
-        <dd
-          @click="goByOrder(item.order);tocDialogVisible=false;"
-          v-for="item in chapters"
-          :key="item.order"
-        >
+        <dd @click="goByOrder(item.order);tocDialogVisible=false;"
+            v-for="item in chapters"
+            :key="item.order">
           <span>{{item.title}}</span>
         </dd>
       </dl>
     </el-dialog>
-    <el-dialog title="页面设置" :visible.sync="configDialogVisible" width="50%" center>
+    <el-dialog title="页面设置"
+               :visible.sync="configDialogVisible"
+               width="50%"
+               center>
       <config @config-done="handleConfig"></config>
     </el-dialog>
   </el-container>
@@ -72,7 +104,7 @@ import comment from "../comment/Comment.vue";
 export default {
   components: {
     Config,
-    comment
+    comment,
   },
   data() {
     return {
@@ -87,8 +119,9 @@ export default {
       chapter: {},
       tocDialogVisible: false,
       configDialogVisible: false,
-      theme: 'theme-0',
-      // comments:[],
+      theme: "theme-0",
+      comments: [],
+      line: null,
     };
   },
   created() {
@@ -109,26 +142,26 @@ export default {
     getTOC() {
       let summaryUrl = `/chapter/chaptersByBookId?bookId=${this.bid}`;
       let self = this;
-      this.$axios.get(summaryUrl).then(res => {
+      this.$axios.get(summaryUrl).then((res) => {
         // let url = `/api/btoc/${res.data[0]._id}?view=chapters&channel=mweb`;
         // self.$axios.get(url).then(r => {
-          self.bookTitle = res.data.data[0].bookName;
-          console.log(self.bookTitle)
-          for (let item of res.data.data) {
-            if (self.cid == item.id && self.order == item.order) {
-              self.link = item.link;
-              self.getContent();
-            }
-            var ch = {};
-            ch.order = item.order;
-            ch.title = item.title;
-            ch.id = item.id;
-            ch.link = item.link;
-            ch.isVip = item.isVip;
-            self.chapters.push(ch);
-            self.chapter = item;
+        self.bookTitle = res.data.data[0].bookName;
+        console.log(self.bookTitle);
+        for (let item of res.data.data) {
+          if (self.cid == item.id && self.order == item.order) {
+            self.link = item.link;
+            self.getContent();
           }
-          self.$emit("first-chapter", self.chapters[0]);
+          var ch = {};
+          ch.order = item.order;
+          ch.title = item.title;
+          ch.id = item.id;
+          ch.link = item.link;
+          ch.isVip = item.isVip;
+          self.chapters.push(ch);
+          self.chapter = item;
+        }
+        self.$emit("first-chapter", self.chapters[0]);
         // });
       });
     },
@@ -137,18 +170,22 @@ export default {
       // TODO 不需要使用escape方法
       let url = "/chapter/chapterContent/" + lnk;
       let self = this;
-      this.$axios.get(url).then(res => {
+      this.$axios.get(url).then((res) => {
         let ch = res.data.data;
         if (!ch.isVip) {
-          self.content = ch.content.split(" ");
+          self.content = ch.content;
           self.chapterTitle = ch.title;
           self.order = ch.order;
         } else {
-          self.content = ch.content.split(" ");
+          self.content = ch.content;
           self.chapterTitle = ch.title;
           self.order = ch.order;
         }
       });
+    },
+    showComment(line) {
+      console.log(line);
+      this.line = line;
     },
     readPrev() {
       let ord = parseInt(this.order) - 1;
@@ -174,13 +211,13 @@ export default {
         path: "/reader/" + this.bid + "/",
         query: {
           cid: item.id,
-          order: item.order
-        }
+          order: item.order,
+        },
       });
     },
     goToBook() {
       this.$router.push({
-        path: "/book/" + this.bid + "/"
+        path: "/book/" + this.bid + "/",
       });
     },
     openTOC() {
@@ -190,17 +227,17 @@ export default {
       this.configDialogVisible = true;
     },
     handleConfig(configRes) {
-        if (configRes.save) {
-            console.log(configRes.configs)
-            let cfg = configRes.configs
-            if (this.theme != cfg.theme) {
-                this.changeTheme(this.theme, cfg.theme)
-                this.theme = cfg.theme
-            }
-        } else {
-            console.log("config cancelled")
+      if (configRes.save) {
+        console.log(configRes.configs);
+        let cfg = configRes.configs;
+        if (this.theme != cfg.theme) {
+          this.changeTheme(this.theme, cfg.theme);
+          this.theme = cfg.theme;
         }
-        this.configDialogVisible = false
+      } else {
+        console.log("config cancelled");
+      }
+      this.configDialogVisible = false;
     },
     changeTheme(from, to) {
       var eles = document.getElementsByClassName(from);
@@ -217,125 +254,152 @@ export default {
       } else {
         el.style.top = "-20px";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 
 <style lang="stylus" scoped>
-bgColor = #e9e6d0
-bdColor = #cab389
-bgHlColor = #faf7e1
-bgColor0 = #e9e6d0
-bgColor1 = #f7edd4
-bgColor2 = #eaf4e9
-bgColor3 = #e9f4f6
-bgColor4 = #f7e9e8
-bgColor5 = #e6e6e6
+bgColor = #e9e6d0;
+bdColor = #cab389;
+bgHlColor = #faf7e1;
+bgColor0 = #e9e6d0;
+bgColor1 = #f7edd4;
+bgColor2 = #eaf4e9;
+bgColor3 = #e9f4f6;
+bgColor4 = #f7e9e8;
+bgColor5 = #e6e6e6;
 
-.theme-0
-  background-color bgColor0
+.theme-0 {
+  background-color: bgColor0;
+}
 
-.theme-1
-  background-color bgColor1
+.theme-1 {
+  background-color: bgColor1;
+}
 
-.theme-2
-  background-color bgColor2
+.theme-2 {
+  background-color: bgColor2;
+}
 
-.theme-3
-  background-color bgColor3
+.theme-3 {
+  background-color: bgColor3;
+}
 
-.theme-4
-  background-color bgColor4
+.theme-4 {
+  background-color: bgColor4;
+}
 
-.theme-5
-  background-color bgColor5
+.theme-5 {
+  background-color: bgColor5;
+}
 
-.side-bar
-  position fixed
-  margin-top 20px
+.side-bar {
+  position: fixed;
+  margin-top: 20px;
 
-  dl
-    border 1px solid bdColor
-    border-bottom 0
+  dl {
+    border: 1px solid bdColor;
+    border-bottom: 0;
 
-    dd
-      width 60px
-      height 60px
-      line-height 60px
-      text-align center
-      cursor pointer
-      border-bottom 1px solid bdColor
+    dd {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      cursor: pointer;
+      border-bottom: 1px solid bdColor;
 
-      &:hover
-        background-color bgHlColor
-        color #999
+      &:hover {
+        background-color: bgHlColor;
+        color: #999;
+      }
+    }
+  }
+}
 
-.reader-header
-  border 1px solid bdColor
-  line-height 50px
+.reader-header {
+  border: 1px solid bdColor;
+  line-height: 50px;
+}
 
-.content-box
-  border 1px solid bdColor
-  padding 20px
+.content-box {
+  border: 1px solid bdColor;
+  padding: 20px;
+}
 
-.reader-main
-  margin-top 10px
+.reader-main {
+  margin-top: 10px;
+}
 
-.reader-title
-  text-align right
-  font-weight bold
-  font-size 20px
+.reader-title {
+  text-align: right;
+  font-weight: bold;
+  font-size: 20px;
+}
 
-.reader-book-title
-  text-align center
-  font-size 18px
+.reader-book-title {
+  text-align: center;
+  font-size: 18px;
+}
 
-.reader-chapter-title
-  text-align center
-  font-size 20px
-  font-weight bold
+.reader-chapter-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-.reader-content-pane
-  padding 10px
+.reader-content-pane {
+  padding: 10px;
+}
 
-.reader-content-line
-  text-align left
-  margin-top 10px
-  font-size 18px
+.reader-content-line {
+  text-align: left;
+  margin-top: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
 
-.reader-prev
-  text-align left
-  cursor pointer
+.reader-prev {
+  text-align: left;
+  cursor: pointer;
 
-  span
-    margin-left 5px
+  span {
+    margin-left: 5px;
+  }
+}
 
-.reader-next
-  text-align next
-  cursor pointer
+.reader-next {
+  text-align: next;
+  cursor: pointer;
 
-  span
-    margin-right 5px
+  span {
+    margin-right: 5px;
+  }
+}
 
-.toc-popper
-  width 800px
-  background-color bgColor
+.toc-popper {
+  width: 800px;
+  background-color: bgColor;
+}
 
-.toc-list
-  overflow-y scroll
-  max-height 600px
+.toc-list {
+  overflow-y: scroll;
+  max-height: 600px;
 
-  dd
-    border-bottom 1px solid #eee
-    line-height 40px
-    height 40px
-    padding 0 20px
-    cursor pointer
+  dd {
+    border-bottom: 1px solid #eee;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 20px;
+    cursor: pointer;
 
-    &:hover
-      color #999
-      background-color #eee
+    &:hover {
+      color: #999;
+      background-color: #eee;
+    }
+  }
+}
 </style>
 
