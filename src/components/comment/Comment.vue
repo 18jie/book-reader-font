@@ -65,15 +65,15 @@
 
         <div class="comment-f">
           <div>
-            <div class="nickname author">
+            <!-- <div class="nickname author">
               {{ item.commentUser.nickName }}
-            </div>
+            </div> -->
             <!-- <div v-if="item.commentUser.id === authorId" class="icon author">
               {{ label }}
             </div> -->
-            <div class="date">
+            <!-- <div class="date">
               {{ item.createDate }}
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -153,16 +153,16 @@
 
           <div class="comment-f">
             <div>
-              <div class="nickname author">
+              <!-- <div class="nickname author">
                 {{ ritem.commentUser.nickName }}
-              </div>
+              </div> -->
               <div v-if="ritem.commentUser.id === authorId"
                    class="icon author">
                 {{ label }}
               </div>
-              <div class="date">
+              <!-- <div class="date">
                 {{ ritem.createDate }}
-              </div>
+              </div> -->
             </div>
           </div>
 
